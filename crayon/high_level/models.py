@@ -23,6 +23,9 @@ class Local(models.Model):
 class SiegeSocial(Local):
     pass
 
+    def __str__(self):
+        return f"{self.nom}"
+
 
 class Machine(models.Model):
     nom = models.CharField(max_length=100)
@@ -32,9 +35,21 @@ class Machine(models.Model):
     def __str__(self):
         return f"{self.nom}"
 
+    def costs(self):
+        return self.prix
+
 
 class Usine(Local):
     machines = models.ManyToManyField(Machine)
+
+    def __str__(self):
+        return f"{self.nom}"
+
+    def costs(self):
+        total_machine_costs = sum(machine.costs() for machine in self.machines.all())
+        surface_costs = self.surface * self.ville.prix
+        total_costs = total_machine_costs + surface_costs
+        return total_costs
 
 
 class Objet(models.Model):
@@ -56,6 +71,9 @@ class Stock(models.Model):
     objet = models.ForeignKey(Ressource, on_delete=models.PROTECT)
     nombre = models.IntegerField()
 
+    def __str__(self):
+        return f"{self.objet}"
+
 
 class QuantiteRessource(models.Model):
     ressource = models.ForeignKey(Ressource, on_delete=models.PROTECT)
@@ -64,16 +82,27 @@ class QuantiteRessource(models.Model):
     def __str__(self):
         return f"{self.ressource}"
 
+    def costs(self):
+        return self.quantite * self.ressource.prix
+
 
 class Etape(models.Model):
     nom = models.CharField(max_length=100)
-    machine = models.ForeignKey(Machine, on_delete=models.PROTECT)
-    quantite_ressource = models.ForeignKey(Ressource, on_delete=models.PROTECT)
+    machine = models.ManyToManyField(Machine)
+    quantite_ressource = models.ManyToManyField(Ressource)
     duree = models.IntegerField()
     etape_suivante = models.ForeignKey(
         "self", null=True, on_delete=models.PROTECT, blank=True
     )
 
+    def __str__(self):
+        return f"{self.nom}"
+
 
 class Produit(Objet):
-    premiere_etape = models.ForeignKey(Etape, on_delete=models.PROTECT)
+    premiere_etape = models.ForeignKey(
+        Etape, null=True, on_delete=models.PROTECT, blank=True
+    )
+
+    def __str__(self):
+        return f"{self.nom}"
