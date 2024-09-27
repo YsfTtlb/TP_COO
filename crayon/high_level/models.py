@@ -10,7 +10,7 @@ class Ville(models.Model):
     def __str__(self):
         return f"{self.nom}"
 
-    def json(self):
+    def json_extend(self):
         return {
             "nom": self.nom,
             "code_postale": self.code_postale,

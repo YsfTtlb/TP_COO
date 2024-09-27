@@ -1,14 +1,17 @@
 # Create your views here.
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views import View
 from .models import Ville, Usine, Ressource, Etape, Produit
 
 
-class VilleDetailView(View):
-    def get(self, request, pk):
-        ville = Ville.objects.get(pk=pk)
-        return JsonResponse(ville.json())
+class VilleApiView(APIView):
+    def get(self, request, pk, format=None):
+        ville = get_object_or_404(Ville, pk=pk)
+        return Response(ville.json_extended(), status=status.HTTP_200_OK)
 
 
 class UsineDetailView(View):
