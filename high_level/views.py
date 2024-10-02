@@ -8,10 +8,10 @@ from django.views import View
 from .models import Ville, Usine, Ressource, Etape, Produit
 
 
-class VilleApiView(APIView):
-    def get(self, request, pk, format=None):
+class VilleDetailView(View):
+    def get(self, request, pk):
         ville = get_object_or_404(Ville, pk=pk)
-        return Response(ville.json_extended(), status=status.HTTP_200_OK)
+        return JsonResponse(ville.json())
 
 
 class UsineDetailView(View):

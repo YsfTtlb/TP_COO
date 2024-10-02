@@ -10,14 +10,11 @@ class Ville(models.Model):
     def __str__(self):
         return f"{self.nom}"
 
-    def json_extended(self):
-        # Exemple de sérialisation étendue, vous pouvez ajuster selon vos besoins
-        usines = self.usine_set.all()  # Récupère toutes les usines associées à cette ville
+    def json(self):
         return {
             "nom": self.nom,
             "code_postale": self.code_postale,
             "prix": self.prix,
-            "usines": [usine.json() for usine in usines], 
         }
 
 

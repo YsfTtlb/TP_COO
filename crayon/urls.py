@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from high_level.views import (
-    VilleApiView,
+    VilleDetailView,
     UsineDetailView,
     RessourceDetailView,
     EtapeDetailView,
@@ -27,7 +27,7 @@ from high_level.views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/ville/<int:pk>/", VilleApiView.as_view(), name="ville_api"),
+    path("ville/<int:pk>/", VilleDetailView.as_view(), name="ville_detail"),
     path("usine/<int:pk>/", UsineDetailView.as_view(), name="usine_detail"),
     path("ressource/<int:pk>/", RessourceDetailView.as_view(), name="ressource_detail"),
     path("etape/<int:pk>/", EtapeDetailView.as_view(), name="etape_detail"),
